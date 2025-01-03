@@ -58,42 +58,62 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.kBgColor,
+      extendBodyBehindAppBar: true,  // Allow content behind AppBar
       appBar: AppBar(
-        backgroundColor: AppColors.kBgColor,
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(
-            Ionicons.chevron_back,
-            color: Colors.black,
+        leading: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: IconButton(
+            onPressed: () => Get.back(),
+            icon: const Icon(
+              Ionicons.chevron_back,
+              color: Colors.black,
+            ),
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Ionicons.bag_outline,
-              color: Colors.black,
+          Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Ionicons.bag_outline,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
       ),
       body: Column(
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height * .35,
-            padding: const EdgeInsets.only(bottom: 30),
-            width: double.infinity,
-            child: Image.network(
-              widget.image,
-              fit: BoxFit.contain,
+          Hero(  // Add Hero animation for smooth transitions
+            tag: widget.image,
+            child: Container(
+              height: MediaQuery.of(context).size.height * .4,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.kSmProductBgColor.withOpacity(0.3),
+              ),
+              child: Image.network(
+                widget.image,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
           Expanded(
             child: Stack(
               children: [
                 Container(
-                  padding: const EdgeInsets.only(top: 40, right: 14, left: 14),
+                  padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -105,85 +125,123 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Chanel',
-                          style: GoogleFonts.poppins(
-                            fontSize: 15,
-                            color: Colors.grey,
-                          ),
-                        ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              widget.title,
-                              style: GoogleFonts.poppins(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
                               ),
-                            ),
-                            Text(
-                              '\$${widget.price.toStringAsFixed(2)}',
-                              style: GoogleFonts.poppins(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
+                              decoration: BoxDecoration(
+                                color: AppColors.kSmProductBgColor,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                'Chanel',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                ),
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.title,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '\$${widget.price.toStringAsFixed(2)}',
+                              style: GoogleFonts.poppins(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          'Description',
+                          style: GoogleFonts.poppins(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
                         Text(
                           widget.description,
                           style: GoogleFonts.poppins(
                             fontSize: 15,
-                            color: Colors.grey,
+                            color: Colors.grey[600],
+                            height: 1.5,
                           ),
                         ),
                         const SizedBox(height: 25),
                         Text(
                           'Similar Products',
                           style: GoogleFonts.poppins(
-                            fontSize: 16,
+                            fontSize: 18,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(height: 35),
+                        const SizedBox(height: 15),
                         isLoading
-                            ? const Center(child: CircularProgressIndicator()) // Show loader
+                            ? const Center(child: CircularProgressIndicator())
                             : smProducts.isEmpty
                                 ? const Center(child: Text("No similar products found."))
                                 : SizedBox(
-                                    height: 110,
+                                    height: 130,
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       itemCount: smProducts.length,
                                       itemBuilder: (context, index) {
                                         final product = smProducts[index];
                                         return Container(
-                                          margin: const EdgeInsets.only(right: 6),
-                                          width: 110,
-                                          height: 110,
+                                          margin: const EdgeInsets.only(right: 12),
+                                          width: 120,
                                           decoration: BoxDecoration(
                                             color: AppColors.kSmProductBgColor,
                                             borderRadius: BorderRadius.circular(20),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(0.05),
+                                                blurRadius: 5,
+                                                spreadRadius: 1,
+                                              ),
+                                            ],
                                           ),
                                           child: Column(
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               Image.network(
-                                                product['thumbnail'], // Use thumbnail URL
-                                                height: 70,
+                                                product['thumbnail'],
+                                                height: 80,
                                                 fit: BoxFit.contain,
                                               ),
-                                              const SizedBox(height: 5),
-                                              Text(
-                                                product['title'],
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w500,
+                                              const SizedBox(height: 8),
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                                child: Text(
+                                                  product['title'],
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.center,
+                                                  overflow: TextOverflow.ellipsis,
                                                 ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
                                               ),
                                             ],
                                           ),
@@ -191,7 +249,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                       },
                                     ),
                                   ),
-                        const SizedBox(height: 72),
+                        const SizedBox(height: 30),
                       ],
                     ),
                   ),
@@ -215,17 +273,24 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
       ),
       bottomNavigationBar: Container(
         height: 100,
-        color: Colors.white,
-        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(16),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: 50,
-              height: 50,
-              alignment: Alignment.center,
+              width: 60,
+              height: 60,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(15),
                 border: Border.all(color: AppColors.kGreyColor),
               ),
               child: const Icon(
@@ -237,18 +302,28 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
             const SizedBox(width: 20),
             Expanded(
               child: Container(
-                height: 50,
-                alignment: Alignment.center,
+                height: 60,
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Text(
-                  '+ Add to Cart',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      // Add to cart logic
+                    },
+                    borderRadius: BorderRadius.circular(15),
+                    child: Center(
+                      child: Text(
+                        'Add to Cart',
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
